@@ -24,19 +24,14 @@ async function handleSubmit(e){
 e.preventDefault()
 
 
-  const { data, error } = await supabase.auth.signUp(
-    {
-      email: formData.email,
-      password: formData.password,
-      options: {
-        data: {
-          first_name: formData.firstName,
-          last_name: formData.lastName,
-        }
-      }
-    }
-  )
-
+const { data, error } = await supabase.from('User Table').insert([
+  {
+    email: formData.email,
+    first_name: formData.firstName,
+    last_name: formData.lastName,
+    password: formData.password,
+  },
+]);
 
 }
 
