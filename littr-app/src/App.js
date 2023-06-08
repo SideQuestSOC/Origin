@@ -26,12 +26,19 @@ e.preventDefault()
 
 const { data, error } = await supabase.from('User Table').insert([
   {
-    email: formData.email,
+    user_id: "bda61010-05db-11ee-be56-0242ac120002",
     first_name: formData.firstName,
     last_name: formData.lastName,
-    password: formData.password,
   },
 ]);
+
+if (error) {
+  console.error('Error inserting data:', error);
+} else {
+  console.log('Data inserted successfully:', data);
+}
+
+
 
 }
 
