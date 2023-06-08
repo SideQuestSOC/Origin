@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import{supabase} from './client';
 
+const { v4: uuidv4 } = require('uuid');
+const userId = uuidv4();
+
 const App = () => {
   const [formData, setFormData] = useState({
     firstName: '',
@@ -24,12 +27,14 @@ async function handleSubmit(e){
 e.preventDefault()
 
 
-const { data, error } = await supabase.from('User Table').insert([
+const { data, error } = await supabase.from('users').insert([
   {
-    user_id: "bda61010-05db-11ee-be56-0242ac120002",
+
+    id: userId,
     first_name: formData.firstName,
     last_name: formData.lastName,
-  },
+  }
+
 ]);
 
 if (error) {
