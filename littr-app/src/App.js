@@ -25,7 +25,7 @@ const App = () => {
     e.preventDefault();
 
     try {
-    
+
       const { user, error } = await supabase.auth.signUp({
         email: formData.email,
         password: formData.password,
@@ -35,11 +35,8 @@ const App = () => {
         console.error('Error signing up:', error);
         return;
       }
-
-   
       const userId = user.id;
 
-     
       const { data, error: insertError } = await supabase
         .from('public_users')
         .insert([
