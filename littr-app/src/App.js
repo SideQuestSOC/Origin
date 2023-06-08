@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
-import{supabase} from './client';
+import { supabase } from './client';
 
-const { v4: uuidv4 } = require('uuid');
-const userId = uuidv4();
 
 const App = () => {
   const [formData, setFormData] = useState({
@@ -23,29 +21,45 @@ const App = () => {
     });
   }
 
-async function handleSubmit(e){ 
-e.preventDefault()
+  async function handleSubmit(e) {
+    e.preventDefault();
 
+    try {
+    
+      const { user, error } = await supabase.auth.signUp({
+        email: formData.email,
+        password: formData.password,
+      });
 
-const { data, error } = await supabase.from('users').insert([
-  {
+      if (error) {
+        console.error('Error signing up:', error);
+        return;
+      }
 
-    id: userId,
-    first_name: formData.firstName,
-    last_name: formData.lastName,
+   
+      const userId = user.id;
+
+     
+      const { data, error: insertError } = await supabase
+        .from('public_users')
+        .insert([
+          {
+            id: userId,
+            first_name: formData.firstName,
+            last_name: formData.lastName,
+          },
+        ]);
+
+      if (insertError) {
+        console.error('Error inserting user:', insertError);
+        return;
+      }
+
+      console.log('User created and data inserted successfully:', data);
+    } catch (error) {
+      console.error('Error:', error);
+    }
   }
-
-]);
-
-if (error) {
-  console.error('Error inserting data:', error);
-} else {
-  console.log('Data inserted successfully:', data);
-}
-
-
-
-}
 
   return (
     <div>
